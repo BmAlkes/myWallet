@@ -15,6 +15,9 @@ button, input{
     border:0;
     outline: 0;
 }
+button{
+    cursor:pointer;
+}
 
 
 `;
