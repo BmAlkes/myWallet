@@ -1,8 +1,40 @@
 import React from "react";
-import { Container } from "./styles";
+import { Container, Header, LogoImg, MenuContainer, Title } from "./styles";
+import logo from "../../assets/assets/logo.svg";
+import {
+  MdArrowDownward,
+  MdArrowUpward,
+  MdDashboard,
+  MdLogout,
+  MdOutlet,
+} from "react-icons/md";
 
 const Aside: React.FC = () => {
-  return <Container>Aside</Container>;
+  return (
+    <Container>
+      <Header>
+        <LogoImg src={logo} alt="" />
+        <Title>My Wallet</Title>
+      </Header>
+      <MenuContainer>
+        <a href="">
+          <MdDashboard /> Dashboard
+        </a>
+        <a href="">
+          <MdArrowUpward />
+          Income
+        </a>
+        <a href="">
+          <MdArrowDownward />
+          Outcome
+        </a>
+        <a href="">
+          <MdLogout />
+          Logout
+        </a>
+      </MenuContainer>
+    </Container>
+  );
 };
 
 export default Aside;
