@@ -1,7 +1,22 @@
 import React from "react";
+import { Container } from "./styles";
+import ContentHeader from "../../components/ContentHeader";
+import SelectInput from "../../components/SelectInput";
 
 const List: React.FC = () => {
-  return <div>List</div>;
+  const options = [{ value: "bmalkes", label: "Bmalkes" }];
+  const frutas = [
+    { value: "banana", label: "Banana" },
+    { value: "uva", label: "Uva" },
+  ];
+  return (
+    <Container>
+      <ContentHeader title="List" lineColor=" #009011">
+        <SelectInput options={options} />
+        <SelectInput options={frutas} />
+      </ContentHeader>
+    </Container>
+  );
 };
 
 export default List;
