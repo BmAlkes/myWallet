@@ -1,7 +1,8 @@
 import React from "react";
-import { Container } from "./styles";
+import { Container, Content } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput";
+import HistoryFinanceCard from "../../components/HistoryFinanceCard/index.tsx";
 
 const List: React.FC = () => {
   const options = [{ value: "bmalkes", label: "Bmalkes" }];
@@ -11,10 +12,20 @@ const List: React.FC = () => {
   ];
   return (
     <Container>
-      <ContentHeader title="List" lineColor=" #009011">
+      <ContentHeader title="Outcome" lineColor="#E44c4e">
         <SelectInput options={options} />
         <SelectInput options={frutas} />
       </ContentHeader>
+      <Content>
+        <HistoryFinanceCard
+          cardColor="#313862"
+          tagColor="#e44c4e"
+          title="Conta de luz"
+          subtitle="26/05/2023"
+          amount="$ 35,00"
+          key=""
+        />
+      </Content>
     </Container>
   );
 };
