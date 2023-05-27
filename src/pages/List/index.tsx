@@ -18,7 +18,6 @@ const List: React.FC = () => {
       </ContentHeader>
       <Content>
         <HistoryFinanceCard
-          cardColor="#313862"
           tagColor="#e44c4e"
           title="Conta de luz"
           subtitle="26/05/2023"
