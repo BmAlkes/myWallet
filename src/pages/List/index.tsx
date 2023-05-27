@@ -6,6 +6,8 @@ import HistoryFinanceCard from "../../components/HistoryFinanceCard/index.tsx";
 import { useParams } from "react-router-dom";
 import expenses from "../../repositories/expenses.ts";
 import gains from "../../repositories/gains.ts";
+import formatCurrency from "../../utils/formatCurrency.ts";
+import formatDate from "../../utils/formatDate.ts";
 
 interface IData {
   id: string;
@@ -35,10 +37,10 @@ const List: React.FC = () => {
       return {
         id: String(Math.random() * data.length),
         description: item.description,
-        amountFormatted: item.amount,
+        amountFormatted: formatCurrency(Number(item.amount)),
         frequency: item.frequency,
-        dataFormatted: item.date,
-        tagColor: "#4e41f0",
+        dataFormatted: formatDate(item.date),
+        tagColor: item.frequency === "recorrente" ? "#4e41f0" : "#e44c4e",
       };
     });
 
@@ -77,7 +79,7 @@ const List: React.FC = () => {
             tagColor={item.tagColor}
             title={item.description}
             subtitle={item.dataFormatted}
-            amount={`$${item.amountFormatted}`}
+            amount={`${item.amountFormatted}`}
             key={item.id}
           />
         ))}
