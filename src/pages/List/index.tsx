@@ -1,11 +1,23 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Container, Content, Filters } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput";
 import HistoryFinanceCard from "../../components/HistoryFinanceCard/index.tsx";
 import { useParams } from "react-router-dom";
+import expenses from "../../repositories/expenses.ts";
+import gains from "../../repositories/gains.ts";
+
+interface IData {
+  id: string;
+  description: string;
+  amountFormatted: string;
+  frequency: string;
+  dataFormatted: string;
+  tagColor: string;
+}
 
 const List: React.FC = () => {
+  const [data, setData] = useState<IData[]>([]);
   const { type } = useParams();
 
   const title = useMemo(() => {
@@ -13,6 +25,25 @@ const List: React.FC = () => {
       ? { title: "Income", lineColor: "#f7931b" }
       : { title: "Outcome", lineColor: "#e44c4e" };
   }, [type]);
+
+  const listData = useMemo(() => {
+    return type === "entry-balance" ? gains : expenses;
+  }, [type]);
+
+  useEffect(() => {
+    const response = listData.map((item) => {
+      return {
+        id: String(Math.random() * data.length),
+        description: item.description,
+        amountFormatted: item.amount,
+        frequency: item.frequency,
+        dataFormatted: item.date,
+        tagColor: "#4e41f0",
+      };
+    });
+
+    setData(response);
+  }, []);
 
   const months = [
     { value: 6, label: "June" },
@@ -41,13 +72,15 @@ const List: React.FC = () => {
         </button>
       </Filters>
       <Content>
-        <HistoryFinanceCard
-          tagColor="#e44c4e"
-          title="Conta de luz"
-          subtitle="26/05/2023"
-          amount="$ 35,00"
-          key=""
-        />
+        {data.map((item) => (
+          <HistoryFinanceCard
+            tagColor={item.tagColor}
+            title={item.description}
+            subtitle={item.dataFormatted}
+            amount={`$${item.amountFormatted}`}
+            key={item.id}
+          />
+        ))}
       </Content>
     </Container>
   );
