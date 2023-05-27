@@ -17,14 +17,14 @@ const Aside: React.FC = () => {
         <Title>My Wallet</Title>
       </Header>
       <MenuContainer>
-        <a href="">
+        <a href="/dashboard">
           <MdDashboard /> Dashboard
         </a>
-        <a href="">
+        <a href="/list/entry-balance">
           <MdArrowUpward />
           Income
         </a>
-        <a href="">
+        <a href="/list/exit-balance">
           <MdArrowDownward />
           Outcome
         </a>
