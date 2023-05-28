@@ -8,6 +8,8 @@ import expenses from "../../repositories/expenses.ts";
 import gains from "../../repositories/gains.ts";
 import formatCurrency from "../../utils/formatCurrency.ts";
 import formatDate from "../../utils/formatDate.ts";
+import { v4 as uuidv4 } from "uuid";
+import listOfMonths from "../../utils/months.ts";
 
 interface IData {
   id: string;
@@ -20,6 +22,12 @@ interface IData {
 
 const List: React.FC = () => {
   const [data, setData] = useState<IData[]>([]);
+  const [monthSelected, setMonthSelected] = useState<string>(
+    String(new Date().getMonth() + 1)
+  );
+  const [yearSelected, setYearSelected] = useState<string>(
+    String(new Date().getFullYear())
+  );
   const { type } = useParams();
 
   const title = useMemo(() => {
@@ -33,9 +41,17 @@ const List: React.FC = () => {
   }, [type]);
 
   useEffect(() => {
-    const response = listData.map((item) => {
+    const filteredDate = listData.filter((item) => {
+      const date = new Date(item.date);
+      const month = String(date.getMonth() + 1);
+      const year = String(date.getFullYear());
+
+      return month === monthSelected && year === yearSelected;
+    });
+
+    const formattedDate = filteredDate.map((item) => {
       return {
-        id: String(Math.random() * data.length),
+        id: uuidv4(),
         description: item.description,
         amountFormatted: formatCurrency(Number(item.amount)),
         frequency: item.frequency,
@@ -43,27 +59,43 @@ const List: React.FC = () => {
         tagColor: item.frequency === "recorrente" ? "#4e41f0" : "#e44c4e",
       };
     });
+    setData(formattedDate);
+  }, [listData, monthSelected, yearSelected, data.length]);
 
-    setData(response);
-  }, []);
+  const year = useMemo(() => {
+    const uniqueYears: number[] = [];
 
-  const months = [
-    { value: 6, label: "June" },
-    { value: 7, label: "July" },
-    { value: 8, label: "August" },
-    { value: 9, label: "September" },
-    { value: 10, label: "October" },
-  ];
-  const years = [
-    { value: 2023, label: 2023 },
-    { value: 2024, label: 2024 },
-    { value: 2025, label: 2025 },
-  ];
+    listData.forEach((item) => {
+      const date = new Date(item.date);
+      const year = date.getFullYear();
+      if (!uniqueYears.includes(year)) {
+        uniqueYears.push(year);
+      }
+    });
+    return uniqueYears.map((year) => {
+      return { value: year, label: year };
+    });
+  }, [listData]);
+
+  const month = useMemo(() => {
+    return listOfMonths.map((month, index) => {
+      return { value: index + 1, label: month };
+    });
+  }, [listData]);
+
   return (
     <Container>
       <ContentHeader title={title.title} lineColor={title.lineColor}>
-        <SelectInput options={months} />
-        <SelectInput options={years} />
+        <SelectInput
+          options={month}
+          defaultValue={monthSelected}
+          onChange={(e) => setMonthSelected(e.target.value)}
+        />
+        <SelectInput
+          options={year}
+          defaultValue={yearSelected}
+          onChange={(e) => setYearSelected(e.target.value)}
+        />
       </ContentHeader>
       <Filters>
         <button type="button" className="tag-filter tag-filter-reccurent">
