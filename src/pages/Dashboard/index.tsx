@@ -9,6 +9,7 @@ import WalletBox from "../../components/WalletBox";
 import MessageBox from "../../components/MessageBox";
 import happy from "../../assets/assets/happy.svg";
 import sad from "../../assets/assets/sad.svg";
+import PieChartDash from "../../components/PieChart";
 
 const DashBoard: React.FC = () => {
   const [monthSelected, setMonthSelected] = useState<number>(
@@ -122,6 +123,29 @@ const DashBoard: React.FC = () => {
     };
   }, [totalBalance]);
 
+  const relationExpensesVersusGains = useMemo(() => {
+    const total = totalGains + totalExpenses;
+
+    const percentGains = (totalGains / total) * 100;
+    const percenteExpenses = (totalExpenses / total) * 100;
+
+    const data = [
+      {
+        name: "Income",
+        value: totalExpenses,
+        percent: Number(percentGains.toFixed(1)),
+        color: "#e44c4e",
+      },
+      {
+        name: "outcome",
+        value: totalExpenses,
+        percent: Number(percenteExpenses.toFixed(1)),
+        color: "#F7931b",
+      },
+    ];
+    return data;
+  }, [totalGains, totalExpenses]);
+
   return (
     <Container>
       <ContentHeader title="Dashboard" lineColor=" #ff931b">
@@ -167,6 +191,7 @@ const DashBoard: React.FC = () => {
           icon={message.icon}
           title={message.title}
         />
+        <PieChartDash data={relationExpensesVersusGains} />
       </Content>
     </Container>
   );
