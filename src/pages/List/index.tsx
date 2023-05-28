@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Container, Content, Filters } from "./styles";
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput";
@@ -8,7 +9,6 @@ import expenses from "../../repositories/expenses.ts";
 import gains from "../../repositories/gains.ts";
 import formatCurrency from "../../utils/formatCurrency.ts";
 import formatDate from "../../utils/formatDate.ts";
-import { v4 as uuidv4 } from "uuid";
 import listOfMonths from "../../utils/months.ts";
 
 interface IData {
@@ -36,7 +36,7 @@ const List: React.FC = () => {
 
   const title = useMemo(() => {
     return type === "entry-balance"
-      ? { title: "Income", lineColor: "#f7931b" }
+      ? { title: "Income", lineColor: "#4e41f0" }
       : { title: "Outcome", lineColor: "#e44c4e" };
   }, [type]);
 
