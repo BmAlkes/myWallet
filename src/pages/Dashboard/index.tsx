@@ -11,6 +11,7 @@ import happy from "../../assets/assets/happy.svg";
 import sad from "../../assets/assets/sad.svg";
 import PieChartDash from "../../components/PieChart";
 import HistoryBox from "../../components/HistoryBox";
+import BarChartBox from "../../components/BarChartBox";
 
 const DashBoard: React.FC = () => {
   const [monthSelected, setMonthSelected] = useState<number>(
@@ -236,13 +237,13 @@ const DashBoard: React.FC = () => {
 
     return [
       {
-        name: "Recorrentes",
+        name: "Recorrent",
         amount: amountRecurrent,
         percent: percentRecurrent ? percentRecurrent : 0,
         color: "#F7931B",
       },
       {
-        name: "Eventuais",
+        name: "Eventual",
         amount: amountEventual,
         percent: percentEventual ? percentEventual : 0,
         color: "#E44C4E",
@@ -281,13 +282,13 @@ const DashBoard: React.FC = () => {
 
     return [
       {
-        name: "Recorrentes",
+        name: "Recorrent",
         amount: amountRecurrent,
         percent: percentRecurrent ? percentRecurrent : 0,
         color: "#F7931B",
       },
       {
-        name: "Eventuais",
+        name: "Eventual",
         amount: amountEventual,
         percent: percentEventual ? percentEventual : 0,
         color: "#E44C4E",
@@ -363,6 +364,15 @@ const DashBoard: React.FC = () => {
           data={historyData}
           lineColorAmountEntry="#f7931b"
           lineColorAmountOutput="#e44c4e"
+        />
+        <BarChartBox
+          title="Outcome"
+          data={relationExpensevesRecurrentVersusEventual}
+        />
+
+        <BarChartBox
+          title="Income"
+          data={relationGainsRecurrentVersusEventual}
         />
       </Content>
     </Container>
