@@ -10,6 +10,7 @@ import MessageBox from "../../components/MessageBox";
 import happy from "../../assets/assets/happy.svg";
 import sad from "../../assets/assets/sad.svg";
 import PieChartDash from "../../components/PieChart";
+import HistoryBox from "../../components/HistoryBox";
 
 const DashBoard: React.FC = () => {
   const [monthSelected, setMonthSelected] = useState<number>(
@@ -50,6 +51,7 @@ const DashBoard: React.FC = () => {
 
   const totalExpenses = useMemo(() => {
     let total = 0;
+
     expenses.forEach((item) => {
       const date = new Date(item.date);
       const year = date.getFullYear();
@@ -59,14 +61,17 @@ const DashBoard: React.FC = () => {
         try {
           total += Number(item.amount);
         } catch {
-          throw new Error("Invalid amount");
+          throw new Error("Invalid amount! Amount must be number.");
         }
       }
     });
+
     return total;
   }, [monthSelected, yearSelected]);
+
   const totalGains = useMemo(() => {
     let total = 0;
+
     gains.forEach((item) => {
       const date = new Date(item.date);
       const year = date.getFullYear();
@@ -76,16 +81,219 @@ const DashBoard: React.FC = () => {
         try {
           total += Number(item.amount);
         } catch {
-          throw new Error("Invalid amount");
+          throw new Error("Invalid amount! Amount must be number.");
         }
       }
     });
+
     return total;
   }, [monthSelected, yearSelected]);
 
   const totalBalance = useMemo(() => {
     return totalGains - totalExpenses;
-  }, [totalExpenses, totalGains]);
+  }, [totalGains, totalExpenses]);
+
+  const message = useMemo(() => {
+    if (totalBalance < 0) {
+      return {
+        title: "That Sad!",
+        description: "This month you spent more than you should.",
+        footerText:
+          "Check your expenses and try to cut some unnecessary things..",
+        icon: sad,
+      };
+    } else if (totalGains === 0 && totalExpenses === 0) {
+      return {
+        title: "Op's!",
+        description: "This month, there are no records of entries or exits.",
+        footerText:
+          "It looks like you haven't made any records for the selected month and year..",
+        icon: sad,
+      };
+    } else if (totalBalance === 0) {
+      return {
+        title: "Opps!",
+        description: "This month you spent exactly what you earned.",
+        footerText: "Take care. Next try to save your money.",
+        icon: happy,
+      };
+    } else {
+      return {
+        title: "Well Done!",
+        description: "Your Wallet is positive!",
+        footerText: "Keep it up. Consider investing your balance.",
+        icon: happy,
+      };
+    }
+  }, [totalBalance, totalGains, totalExpenses]);
+
+  const relationExpensesVersusGains = useMemo(() => {
+    const total = totalGains + totalExpenses;
+
+    const percentGains = Number(((totalGains / total) * 100).toFixed(1));
+    const percentExpenses = Number(((totalExpenses / total) * 100).toFixed(1));
+
+    const data = [
+      {
+        name: "Entradas",
+        value: totalGains,
+        percent: percentGains ? percentGains : 0,
+        color: "#E44C4E",
+      },
+      {
+        name: "Saídas",
+        value: totalExpenses,
+        percent: percentExpenses ? percentExpenses : 0,
+        color: "#F7931B",
+      },
+    ];
+
+    return data;
+  }, [totalGains, totalExpenses]);
+
+  const historyData = useMemo(() => {
+    return listOfMonths
+      .map((_, month) => {
+        let amountEntry = 0;
+        gains.forEach((gain) => {
+          const date = new Date(gain.date);
+          const gainMonth = date.getMonth();
+          const gainYear = date.getFullYear();
+
+          if (gainMonth === month && gainYear === yearSelected) {
+            try {
+              amountEntry += Number(gain.amount);
+            } catch {
+              throw new Error(
+                "amountEntry is invalid. amountEntry must be valid number."
+              );
+            }
+          }
+        });
+
+        let amountOutput = 0;
+        expenses.forEach((expense) => {
+          const date = new Date(expense.date);
+          const expenseMonth = date.getMonth();
+          const expenseYear = date.getFullYear();
+
+          if (expenseMonth === month && expenseYear === yearSelected) {
+            try {
+              amountOutput += Number(expense.amount);
+            } catch {
+              throw new Error(
+                "amountOutput is invalid. amountOutput must be valid number."
+              );
+            }
+          }
+        });
+
+        return {
+          monthNumber: month,
+          month: listOfMonths[month].substr(0, 3),
+          amountEntry,
+          amountOutput,
+        };
+      })
+      .filter((item) => {
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+        return (
+          (yearSelected === currentYear && item.monthNumber <= currentMonth) ||
+          yearSelected < currentYear
+        );
+      });
+  }, [yearSelected]);
+
+  const relationExpensevesRecurrentVersusEventual = useMemo(() => {
+    let amountRecurrent = 0;
+    let amountEventual = 0;
+
+    expenses
+      .filter((expense) => {
+        const date = new Date(expense.date);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+
+        return month === monthSelected && year === yearSelected;
+      })
+      .forEach((expense) => {
+        if (expense.frequency === "recorrente") {
+          return (amountRecurrent += Number(expense.amount));
+        }
+
+        if (expense.frequency === "eventual") {
+          return (amountEventual += Number(expense.amount));
+        }
+      });
+
+    const total = amountRecurrent + amountEventual;
+
+    const percentRecurrent = Number(
+      ((amountRecurrent / total) * 100).toFixed(1)
+    );
+    const percentEventual = Number(((amountEventual / total) * 100).toFixed(1));
+
+    return [
+      {
+        name: "Recorrentes",
+        amount: amountRecurrent,
+        percent: percentRecurrent ? percentRecurrent : 0,
+        color: "#F7931B",
+      },
+      {
+        name: "Eventuais",
+        amount: amountEventual,
+        percent: percentEventual ? percentEventual : 0,
+        color: "#E44C4E",
+      },
+    ];
+  }, [monthSelected, yearSelected]);
+
+  const relationGainsRecurrentVersusEventual = useMemo(() => {
+    let amountRecurrent = 0;
+    let amountEventual = 0;
+
+    gains
+      .filter((gain) => {
+        const date = new Date(gain.date);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+
+        return month === monthSelected && year === yearSelected;
+      })
+      .forEach((gain) => {
+        if (gain.frequency === "recorrente") {
+          return (amountRecurrent += Number(gain.amount));
+        }
+
+        if (gain.frequency === "eventual") {
+          return (amountEventual += Number(gain.amount));
+        }
+      });
+
+    const total = amountRecurrent + amountEventual;
+
+    const percentRecurrent = Number(
+      ((amountRecurrent / total) * 100).toFixed(1)
+    );
+    const percentEventual = Number(((amountEventual / total) * 100).toFixed(1));
+
+    return [
+      {
+        name: "Recorrentes",
+        amount: amountRecurrent,
+        percent: percentRecurrent ? percentRecurrent : 0,
+        color: "#F7931B",
+      },
+      {
+        name: "Eventuais",
+        amount: amountEventual,
+        percent: percentEventual ? percentEventual : 0,
+        color: "#E44C4E",
+      },
+    ];
+  }, [monthSelected, yearSelected]);
 
   const handleMonthSelected = useCallback((month: string) => {
     try {
@@ -104,47 +312,6 @@ const DashBoard: React.FC = () => {
       throw new Error("invalid year value. Is accept integer numbers.");
     }
   }, []);
-
-  const message = useMemo(() => {
-    if (totalBalance < 0) {
-      return {
-        title: " That Sad",
-        description: "This month you spent more than you should",
-        footerText:
-          "Check your expenses and try to cut some unnecessary things.",
-        icon: sad,
-      };
-    }
-    return {
-      description: " Your wallet is positive!!",
-      footerText: "Keep it up. Consider investing your balance",
-      icon: happy,
-      title: "Well Done !",
-    };
-  }, [totalBalance]);
-
-  const relationExpensesVersusGains = useMemo(() => {
-    const total = totalGains + totalExpenses;
-
-    const percentGains = (totalGains / total) * 100;
-    const percenteExpenses = (totalExpenses / total) * 100;
-
-    const data = [
-      {
-        name: "Income",
-        value: totalExpenses,
-        percent: Number(percentGains.toFixed(1)),
-        color: "#e44c4e",
-      },
-      {
-        name: "outcome",
-        value: totalExpenses,
-        percent: Number(percenteExpenses.toFixed(1)),
-        color: "#F7931b",
-      },
-    ];
-    return data;
-  }, [totalGains, totalExpenses]);
 
   return (
     <Container>
@@ -192,6 +359,11 @@ const DashBoard: React.FC = () => {
           title={message.title}
         />
         <PieChartDash data={relationExpensesVersusGains} />
+        <HistoryBox
+          data={historyData}
+          lineColorAmountEntry="#f7931b"
+          lineColorAmountOutput="#e44c4e"
+        />
       </Content>
     </Container>
   );
