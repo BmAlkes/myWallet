@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Controllers, TitleContainer } from "./styles";
-import SelectInput from "../SelectInput";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 

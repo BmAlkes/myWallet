@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import DashBoard from "../pages/Dashboard";
 import List from "../pages/List";
 import Layout from "../components/Layout";

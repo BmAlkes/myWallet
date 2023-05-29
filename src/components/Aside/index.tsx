@@ -17,7 +17,6 @@ import {
   MdDashboard,
   MdLogout,
   MdMenu,
-  MdOutlet,
 } from "react-icons/md";
 import { useAuth } from "../../context/auth";
 import { useTheme } from "../../context/theme";

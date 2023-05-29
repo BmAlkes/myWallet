@@ -15,14 +15,14 @@ const Toogle: React.FC<IToogleProps> = ({
   onChange,
 }) => (
   <Container>
-    <ToogleLabel>White</ToogleLabel>
+    <ToogleLabel>{labelLeft}</ToogleLabel>
     <ToogleSelector
       checked={checked}
       uncheckedIcon={false}
       checkedIcon={false}
       onChange={onChange}
     />
-    <ToogleLabel>Dark</ToogleLabel>
+    <ToogleLabel>{labelRight}</ToogleLabel>
   </Container>
 );
 
