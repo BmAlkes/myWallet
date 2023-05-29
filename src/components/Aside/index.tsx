@@ -8,8 +8,10 @@ import {
   MdLogout,
   MdOutlet,
 } from "react-icons/md";
+import { useAuth } from "../../context/auth";
 
 const Aside: React.FC = () => {
+  const { signOut } = useAuth();
   return (
     <Container>
       <Header>
@@ -17,7 +19,7 @@ const Aside: React.FC = () => {
         <Title>My Wallet</Title>
       </Header>
       <MenuContainer>
-        <a href="/dashboard">
+        <a href="/">
           <MdDashboard /> Dashboard
         </a>
         <a href="/list/entry-balance">
@@ -28,10 +30,10 @@ const Aside: React.FC = () => {
           <MdArrowDownward />
           Outcome
         </a>
-        <a href="">
+        <button onClick={signOut}>
           <MdLogout />
           Logout
-        </a>
+        </button>
       </MenuContainer>
     </Container>
   );

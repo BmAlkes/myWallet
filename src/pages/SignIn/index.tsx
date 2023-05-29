@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import logoImg from "../../assets/lobo.svg";
+import logoImg from "../../assets/lobo.png";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";

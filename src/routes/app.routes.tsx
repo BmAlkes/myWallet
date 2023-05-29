@@ -8,12 +8,10 @@ import Layout from "../components/Layout";
 const AppRoutes: React.FC = () => {
   return (
     <Layout>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="/list/:type" element={<List />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<DashBoard />} />
+        <Route path="/list/:type" element={<List />} />
+      </Routes>
     </Layout>
   );
 };

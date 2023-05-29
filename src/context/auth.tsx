@@ -20,7 +20,7 @@ const AuthProvider: React.FC<INode> = ({ children }) => {
   });
 
   const signIn = (email: string, password: string) => {
-    if (email === "bmalkes" && password === "12356") {
+    if (email === "bmalkes@gmail.com" && password === "12356") {
       localStorage.setItem("@minha-carteira:logged", "true");
       setLogged(true);
     } else {

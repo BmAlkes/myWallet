@@ -41,4 +41,19 @@ export const MenuContainer = styled.div`
       opacity: 0.7;
     }
   }
+  button {
+    background: none;
+    margin-top: 50px;
+    color: ${(props) => props.theme.colors.white};
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 1.3rem;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 `;
