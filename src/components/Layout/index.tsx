@@ -4,7 +4,11 @@ import MainHeader from "../MainHeader";
 import Aside from "../Aside";
 import Content from "../Content";
 
-const Layout: React.FC = ({ children }) => {
+interface INode {
+  children: React.ReactNode;
+}
+
+const Layout: React.FC<INode> = ({ children }) => {
   return (
     <Container>
       <MainHeader />
