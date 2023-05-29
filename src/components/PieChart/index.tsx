@@ -2,7 +2,7 @@ import React from "react";
 import {
   Container,
   Legend,
-  LegendeContainer,
+  LegendContainer,
   SideLeft,
   SideRight,
 } from "./styled";
@@ -20,16 +20,16 @@ const PieChartDash: React.FC<IPieProps> = ({ data }) => (
   <Container>
     <SideLeft>
       <h2> Ratio</h2>
-      <LegendeContainer>
+      <LegendContainer>
         {data.map((indicator) => {
           return (
-            <Legend backgroundColor={indicator.color} key={indicator.name}>
+            <Legend color={indicator.color} key={indicator.name}>
               <div>{indicator.percent}%</div>
               <span>{indicator.name}</span>
             </Legend>
           );
         })}
-      </LegendeContainer>
+      </LegendContainer>
     </SideLeft>
     <SideRight>
       <ResponsiveContainer>

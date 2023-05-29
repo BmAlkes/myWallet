@@ -33,4 +33,26 @@ export const Container = styled.div<IContainerProps>`
   > h1 {
     font-size: 3rem;
   }
+
+  @media (max-width: 768px) {
+    > span {
+      font-size: 14px;
+    }
+    > h1 {
+      word-wrap: break-word;
+      font-size: 22px;
+
+      strong {
+        display: inline-block;
+        width: 100%;
+      }
+    }
+    > small {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    width: 100%;
+  }
 `;

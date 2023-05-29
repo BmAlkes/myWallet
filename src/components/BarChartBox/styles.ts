@@ -74,7 +74,6 @@ export const LegendContainer = styled.ul`
 
   @media (max-width: 1200px) {
     display: flex;
-
     height: auto;
   }
 `;
@@ -107,7 +106,6 @@ export const Legend = styled.li<ILegendProps>`
     > div {
       width: 30px;
       height: 30px;
-
       font-size: 10px;
       line-height: 30px;
     }

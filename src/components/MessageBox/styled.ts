@@ -27,4 +27,21 @@ export const Container = styled.div`
   footer span {
     font-size: 18px;
   }
+  @media (max-width: 768px) {
+    width: 100%;
+    > header h1 {
+      font-size: 24px;
+      img {
+        height: 24px;
+        width: 24px;
+      }
+    }
+    > footer span {
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 420px) {
+    width: 100%;
+    height: auto;
+  }
 `;
